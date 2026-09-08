@@ -72,4 +72,5 @@ state at that block. It does not exercise the Markdown transaction functions,
 wallet signing, staking, wrapping transactions, withdrawal submission, or claiming.
 The single observed withdrawal may be pending, finalized, or claimed; a run does
 not require or demonstrate all three states. Transaction verification is separate
-work requiring test ETH, a test wallet, and transaction receipts.
+work requiring test ETH, a test wallet, and transaction receipts. See the
+[opt-in transaction runner](transaction-verification.md) for that separate flow.

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "mode": "hoodi-transactions",
+  "generatedAt": "2026-09-08T12:09:41.274Z",
+  "status": "passed",
+  "chainId": 560048,
+  "transactions": [
+    {
+      "step": "stake",
+      "status": "passed",
+      "signedHash": "0xa29c272731173fbdc9f5240739c687243e2f2c5e844c230597340625c8c77a2f",
+      "hash": "0xa29c272731173fbdc9f5240739c687243e2f2c5e844c230597340625c8c77a2f",
+      "receipt": {
+        "blockNumber": "3583032",
+        "blockHash": "0x34f79f27b14a654e16eccfefcefbc6cfc4cf4f9fb5d53c978cc994cc51fb4098",
+        "status": "success",
+        "gasUsed": "94167",
+        "effectiveGasPrice": "1287404805"
+      },
+      "result": {
+        "sharesReceived": "970093415024344",
+        "stethReceived": "999999999999999"
+      },
+      "balanceCheck": {
+        "unit": "stETH shares",
+        "before": "0",
+        "after": "970093415024344"
+      }
+    },
+    {
+      "step": "wrap",
+      "status": "passed",
+      "signedHash": "0x0894a62ac764934d3b32987892b788dfeb53e5c9054a8f0f77df333d093f493f",
+      "hash": "0x0894a62ac764934d3b32987892b788dfeb53e5c9054a8f0f77df333d093f493f",
+      "receipt": {
+        "blockNumber": "3583035",
+        "blockHash": "0x6d3e8e0ac09fa625798a7ed6f394aa4143c4e23e217af5fe42c8773f0b64a702",
+        "status": "success",
+        "gasUsed": "164440",
+        "effectiveGasPrice": "1360503763"
+      },
+      "result": {
+        "stethWrapped": "1000000000000000",
+        "wstethReceived": "970093415024344"
+      },
+      "balanceCheck": {
+        "unit": "wstETH base units",
+        "before": "0",
+        "after": "970093415024344"
+      }
+    },
+    {
+      "step": "withdraw",
+      "status": "passed",
+      "signedHash": "0xfaf4fccd4c866682ce5aaef6db045866486fbc9624ed4ed306455ea9ee7412bd",
+      "hash": "0xfaf4fccd4c866682ce5aaef6db045866486fbc9624ed4ed306455ea9ee7412bd",
+      "receipt": {
+        "blockNumber": "3583038",
+        "blockHash": "0x21848fdb3f3fddafdcb972f120453776bbdc80bbc0b7c0426059fdd76b87c993",
+        "status": "success",
+        "gasUsed": "261816",
+        "effectiveGasPrice": "1460010188"
+      },
+      "result": {
+        "requests": [
+          {
+            "requestId": "5019",
+            "requestor": "0x7C0186eD3c66A392FCAA233893a807b265d99005",
+            "owner": "0x7C0186eD3c66A392FCAA233893a807b265d99005",
+            "amountOfStETH": "500000000000000",
+            "amountOfShares": "485046707512172"
+          }
+        ]
+      },
+      "balanceCheck": {
+        "unit": "stETH shares",
+        "before": "970093415024344",
+        "after": "485046707512172"
+      }
+    }
+  ],
+  "limits": {
+    "stakeWei": "1000000000000000",
+    "wrapWei": "1000000000000000",
+    "withdrawalStETH": "500000000000000"
+  },
+  "claim": {
+    "status": "awaiting-finalization",
+    "requestId": "5019"
+  },
+  "account": "0x7C0186eD3c66A392FCAA233893a807b265d99005",
+  "contracts": {
+    "locator": "0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8",
+    "stETH": "0x3508A952176b3c15387C97BE809eaffB1982176a",
+    "wstETH": "0x7E99eE3C66636DE415D2d7C880938F2f40f94De4",
+    "referralStaker": "0xf886BcC68b240316103fE8A12453Ce7831c2e835",
+    "withdrawalQueue": "0xfe56573178f1bcdf53F01A6E9977670dcBBD9186"
+  },
+  "startBalanceWei": "287500000000000000",
+  "project": {
+    "commit": "23a34a0f72c0dd09b1251648eab01e1cc0b8982c",
+    "dirty": true
+  },
+  "sdkVersion": "4.8.0",
+  "checkerDigest": {
+    "sha256": "15ee6e18a3618c7fffbe7cdbe1b5d6f7b4526306c0d4f536e68e297e62f46e88",
+    "files": 3
+  },
+  "lockfileDigest": {
+    "sha256": "8a2d6f764790bc5f88d5b88527bdea6251ab3381c05366c399b45b55b1d25792",
+    "files": 1
+  },
+  "preflight": "passed",
+  "withdrawal": {
+    "amountOfStETH": "500000000000000",
+    "amountOfShares": "485046707512172",
+    "owner": "0x7C0186eD3c66A392FCAA233893a807b265d99005",
+    "timestamp": "1788869484",
+    "isFinalized": false,
+    "isClaimed": false,
+    "id": "5019",
+    "stringId": "5019"
+  },
+  "endBalanceWei": "284772793685558437"
+}

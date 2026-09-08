@@ -20,6 +20,7 @@ An independent community project.
 - Build the actual upstream SDK in isolation and run the same suite against it.
 - Produce JSON/Markdown reports with SDK provenance, artifact hashes, and test results.
 - Run opt-in Hoodi checks against deployed contracts at one finalized block.
+- Run bounded, opt-in Hoodi staking, wrapping, and withdrawal-submission transactions.
 
 The SDK already rejects mismatched client/SDK networks. This project improves
 documentation and its verification; it does not introduce a new SDK network guard.
@@ -52,6 +53,12 @@ deployed contracts, a public contract's ETH balance, the wrapping rate, and one
 existing withdrawal request. It writes `reports/hoodi-live.json` and `.md`.
 See [live verification](docs/live-verification.md) for endpoint configuration,
 report interpretation, and the manual GitHub Actions workflow.
+
+For actual testnet transactions, see [transaction verification](docs/transaction-verification.md).
+The separate `check:transactions` command requires an isolated funded Hoodi wallet
+and `--execute` before it signs or broadcasts. It records receipts and balance changes.
+The [September 8 Hoodi run](evidence/hoodi-transactions-20260908.md) includes successful
+staking, wrapping, and withdrawal-submission receipts. The later claim is pending.
 
 Expected reproduction output:
 
@@ -121,7 +128,9 @@ listed in `examples/manifest.json`. The two root README fragments retain their
 original runtime-only checks. Unselected Markdown blocks and dependency declaration
 files are outside this typechecking scope. Transaction functions are typechecked
 but never called in the offline suite. The separate `check:live` command verifies
-live read paths only; wallet signing and transaction outcomes remain untested.
+live read paths only. The opt-in transaction runner separately verifies local
+signing and staking/wrapping/withdrawal-submission outcomes. Browser wallet flows
+and the later withdrawal claim remain outside those checks.
 
 ## License
 

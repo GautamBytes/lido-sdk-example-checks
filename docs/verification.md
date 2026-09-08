@@ -67,8 +67,9 @@ not reproduce the upstream Yarn lockfile, build CommonJS/playground/documentatio
 sites, or run upstream's complete Anvil/RPC-based suite. The report describes an
 ESM SDK source build plus this project's example checks. These two verification
 targets remain offline. The separate [live Hoodi command](live-verification.md)
-checks deployed read paths; wallet signing, broadcasting, and transaction outcomes
-remain outside coverage.
+checks deployed read paths. The [opt-in transaction runner](transaction-verification.md)
+separately checks local signing and three testnet transaction outcomes; neither
+of these offline verification targets runs it against the network.
 
 Only run source mode on a checkout you trust: source code is compiled and then
 executed by the verification suite. A dirty source checkout is supported but is

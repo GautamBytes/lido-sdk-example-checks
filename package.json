@@ -12,6 +12,7 @@
     "check:types": "tsc --noEmit",
     "check:docs": "node scripts/check-docs.mjs",
     "check:live": "node scripts/check-live.mjs",
+    "check:transactions": "node scripts/check-transactions.mjs",
     "verify": "node scripts/verify.mjs",
     "check": "npm run check:types && npm run check:docs && npm test",
     "reproduce": "node scripts/reproduce.mjs",

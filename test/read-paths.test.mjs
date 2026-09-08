@@ -22,6 +22,13 @@ test('Core snippet reads an ETH balance through the actual SDK', async () => {
   assert.deepEqual(example.fixture.requests, [{ method: 'eth_getBalance', params: [OWNER, 'latest'] }]);
 });
 
+test('changing the Core snippet to a different supported SDK chain is rejected', async () => {
+  const code = await snippet('examples/basic-examples.md', '## Core example');
+  assert.match(code, /chainId: hoodi\.id/);
+  const mutated = code.replace('chainId: hoodi.id', 'chainId: 1');
+  await assert.rejects(execute(mutated), /publicClient chain id 560048 does not match provided chain id 1/);
+});
+
 test('Wrap snippet resolves the locator, creates the contract, and decodes its rate', async () => {
   const example = await loadExample('## Wrap example');
   assert.deepEqual(await example.inspectWrapContract(), { address: WSTETH, stEthPerToken: 112n * 10n ** 16n });

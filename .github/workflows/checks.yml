@@ -8,13 +8,40 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [released, source]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout pinned SDK source
+        if: matrix.sdk == 'source'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: lidofinance/lido-ethereum-sdk
+          ref: 14d3236ff91fdb5c783c11abf0f50f063cb942cb
+          path: .sdk-source
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
           cache: npm
       - run: npm ci --ignore-scripts --no-fund
-      - run: npm run check
-      - run: npm run reproduce
-      - run: npm run demo
+      - name: Verify published SDK
+        if: matrix.sdk == 'released'
+        run: npm run verify -- --output reports/released.json
+      - name: Build and verify SDK source
+        if: matrix.sdk == 'source'
+        run: npm run verify -- --sdk-root .sdk-source --output reports/source.json
+      - name: Publish job summary
+        if: always()
+        run: |
+          for report in reports/*.md; do
+            if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi
+          done
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sdk-verification-${{ matrix.sdk }}
+          path: reports/
+          if-no-files-found: error

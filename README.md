@@ -17,6 +17,8 @@ An independent community project.
 - Exercise wrap contract reads and pending/finalized/claimed withdrawal states
   through the real SDK using deterministic RPC fixtures.
 - Check source snapshot integrity and patch application automatically.
+- Build the actual upstream SDK in isolation and run the same suite against it.
+- Produce JSON/Markdown reports with SDK provenance, artifact hashes, and test results.
 
 The SDK already rejects mismatched client/SDK networks. This project improves
 documentation and its verification; it does not introduce a new SDK network guard.
@@ -31,6 +33,7 @@ npm run check
 npm run check:docs
 npm run reproduce
 npm run demo
+npm run verify -- --output reports/released.json
 ```
 
 Dependency installation needs internet access. The commands above then run without
@@ -61,12 +64,14 @@ upstream failures also pass when those expected failures are reproduced.
 | [Basic examples](examples/basic-examples.md) | Core, staking, withdrawal, and wrapping examples |
 | [Coverage and integration](docs/coverage.md) | Exact coverage, external-checkout command, and troubleshooting |
 | [Getting-started patch](patches/0002-getting-started-examples.patch) | Corrections to the two upstream documentation pages |
+| [SDK build verification](docs/verification.md) | Released/source SDK verification commands and report fields |
 
 The original documentation is pinned to upstream commit
 [`14d3236`](https://github.com/lidofinance/lido-ethereum-sdk/tree/14d3236ff91fdb5c783c11abf0f50f063cb942cb)
 (September 3, 2026). Runtime verification uses the published SDK **4.8.0**,
-viem **2.56.3**, and the committed npm lockfile. This is not a claim that the
-unreleased upstream branch has been built or its full test suite run.
+viem **2.56.3**, and the committed npm lockfile. Source verification additionally
+builds ESM/declarations from the pinned upstream commit and runs this project's
+suite against that build. It does not run upstream's full test suite.
 
 To inspect/apply the patch in a separate SDK checkout at that commit:
 
@@ -88,6 +93,14 @@ the original documents fail and their patched versions pass.
 Upstream integration and review remain separate from this repository's passing
 CI. The checker can target a separate checkout using `--docs-root`; it uses the
 SDK installed in this project, not an automatically built SDK from that checkout.
+To build and test the actual source SDK, use:
+
+```sh
+npm run verify -- --sdk-root /path/to/lido-ethereum-sdk --output reports/source.json
+```
+
+CI verifies both targets and attaches downloadable reports. See
+[verification details](docs/verification.md) for the build environment and limits.
 
 Tests execute only reviewed, committed Markdown; the helper is not a sandbox for
 arbitrary documents. TypeScript checks `src/initialize.ts` and the eight snippets

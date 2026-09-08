@@ -1,5 +1,7 @@
 node_modules/
 .generated/
+reports/
+.sdk-source/
 .env
 .env.*
 !.env.example

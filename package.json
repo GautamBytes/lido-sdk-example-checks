@@ -11,6 +11,7 @@
     "test": "node --test test/*.test.mjs",
     "check:types": "tsc --noEmit",
     "check:docs": "node scripts/check-docs.mjs",
+    "verify": "node scripts/verify.mjs",
     "check": "npm run check:types && npm run check:docs && npm test",
     "reproduce": "node scripts/reproduce.mjs",
     "demo": "node --import tsx src/initialize.ts"

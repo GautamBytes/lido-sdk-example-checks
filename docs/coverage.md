@@ -61,6 +61,9 @@ using the target document's filename and line number. It still resolves SDK,
 viem, and TypeScript from this project's pinned installation. It neither changes
 that checkout nor verifies that its unpublished SDK build is compatible.
 
+Use the separate [source-build verifier](verification.md) to compile the SDK from
+that checkout and run the full suite against the resulting ESM/declaration build.
+
 For CI evaluation alongside an upstream build, check out this project at a reviewed
 commit, install its lockfile, and run the command above pointing to the SDK checkout.
 Use the same command after applying the documentation patches. A maintainer should

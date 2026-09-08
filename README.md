@@ -129,8 +129,9 @@ original runtime-only checks. Unselected Markdown blocks and dependency declarat
 files are outside this typechecking scope. Transaction functions are typechecked
 but never called in the offline suite. The separate `check:live` command verifies
 live read paths only. The opt-in transaction runner separately verifies local
-signing and staking/wrapping/withdrawal-submission outcomes. Browser wallet flows
-and the later withdrawal claim remain outside those checks.
+signing and staking/wrapping/withdrawal-submission outcomes. A claim-only mode is
+available once the request finalizes; the recorded request is still waiting for
+a live claim test. Browser wallet flows remain outside these checks.
 
 ## License
 

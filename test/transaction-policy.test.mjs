@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { encodeFunctionData, parseAbi, zeroAddress } from 'viem';
 import { WithdrawalQueueAbi } from '@lidofinance/lido-ethereum-sdk/withdraw';
-import { TX_CONTRACTS, VALUE, WITHDRAW_VALUE, validateTransaction, validatePermit, checkReceipt } from '../scripts/lib/transaction-policy.mjs';
+import { TX_CONTRACTS, VALUE, WITHDRAW_VALUE, validateTransaction, validatePermit, checkReceipt,
+  claimReadiness, checkClaimResult } from '../scripts/lib/transaction-policy.mjs';
 
 const owner = '0x0000000000000000000000000000000000000011';
 const deadline = BigInt(Math.floor(Date.now() / 1000) + 1800);
@@ -61,4 +62,39 @@ test('receipts require success, the matching hash, sender and destination', () =
     assert.throws(() => checkReceipt({ ...transaction, receipt: { ...transaction.receipt, ...mutation } }, 'stake', owner));
   }
   assert.throws(() => checkReceipt({ hash }, 'stake', owner));
+});
+
+test('claim signing allows only the specified request and sends no ETH', () => {
+  const encode = (ids) => encodeFunctionData({ abi: WithdrawalQueueAbi,
+    functionName: 'claimWithdrawals', args: [ids, ids.map(() => 1n)] });
+  const claim = { ...tx, to: TX_CONTRACTS.withdrawalQueue, value: 0n, data: encode([5019n]) };
+  assert.doesNotThrow(() => validateTransaction(claim, 'claim', owner, 5019n));
+  assert.throws(() => validateTransaction({ ...claim, value: 1n }, 'claim', owner, 5019n));
+  assert.throws(() => validateTransaction({ ...claim, data: encode([5020n]) }, 'claim', owner, 5019n));
+  assert.throws(() => validateTransaction({ ...claim, data: encode([5019n, 5020n]) }, 'claim', owner, 5019n));
+  assert.throws(() => validateTransaction(claim, 'claim', owner));
+});
+
+test('claim readiness distinguishes pending and already-claimed requests from ready ones', () => {
+  const expected = { id: 5019n, owner, amountOfStETH: WITHDRAW_VALUE };
+  const status = { ...expected, isFinalized: false, isClaimed: false };
+  assert.equal(claimReadiness(status, expected), 'awaiting-finalization');
+  assert.equal(claimReadiness({ ...status, isFinalized: true }, expected), 'ready');
+  assert.equal(claimReadiness({ ...status, isFinalized: true, isClaimed: true }, expected), 'already-claimed');
+  assert.throws(() => claimReadiness({ ...status, owner: zeroAddress }, expected));
+  assert.throws(() => claimReadiness({ ...status, id: 5020n }, expected));
+  assert.throws(() => claimReadiness({ ...status, amountOfStETH: 1n }, expected));
+});
+
+test('claim evidence requires a matching event, claimed state, and ETH received after accounting for gas', () => {
+  const hash = `0x${'ab'.repeat(32)}`;
+  const transaction = { hash, receipt: { status: 'success', transactionHash: hash, from: owner,
+    to: TX_CONTRACTS.withdrawalQueue, gasUsed: 100n, effectiveGasPrice: 2n },
+    result: { requests: [{ requestId: 5019n, owner, receiver: owner, amountOfETH: 500n }] } };
+  const status = { id: 5019n, owner, isClaimed: true, isFinalized: true };
+  assert.doesNotThrow(() => checkClaimResult(transaction, status, owner, 5019n, 1000n, 1300n));
+  assert.throws(() => checkClaimResult(transaction, status, owner, 5019n, 1000n, 1301n));
+  assert.throws(() => checkClaimResult(transaction, { ...status, isClaimed: false }, owner, 5019n, 1000n, 1300n));
+  assert.throws(() => checkClaimResult({ ...transaction, result: { requests: [] } }, status, owner, 5019n, 1000n, 1300n));
+  assert.throws(() => checkClaimResult(transaction, status, owner, 5020n, 1000n, 1300n));
 });

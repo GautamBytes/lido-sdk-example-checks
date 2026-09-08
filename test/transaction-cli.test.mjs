@@ -6,10 +6,28 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 test('transaction CLI requires explicit execution and rejects unknown options', () => {
-  for (const args of [['--unknown'], ['--output'], ['--execute', '--execute']]) {
+  for (const args of [['--unknown'], ['--output'], ['--execute', '--execute'], ['--claim-report'],
+    ['--claim-report', 'one.json', '--claim-report', 'two.json']]) {
     const result = spawnSync(process.execPath, ['scripts/check-transactions.mjs', ...args], { encoding: 'utf8' });
     assert.equal(result.status, 2);
   }
+});
+
+test('claim CLI selects a claim-only report without silently starting the original transaction flow', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'claim-cli-'));
+  try {
+    const output = join(directory, 'claim.json');
+    const result = spawnSync(process.execPath, ['scripts/check-transactions.mjs', '--execute',
+      '--claim-report', 'evidence/hoodi-transactions-20260908.json', '--output', output], {
+      encoding: 'utf8', env: { ...process.env, HOODI_WALLET_FILE: '' },
+    });
+    assert.equal(result.status, 1);
+    const report = JSON.parse(await readFile(output, 'utf8'));
+    assert.equal(report.mode, 'hoodi-claim');
+    assert.deepEqual(report.transactions, []);
+    assert.equal(report.limits.stakeWei, '0');
+    assert.equal(report.limits.wrapWei, '0');
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
 test('transaction CLI reports missing wallet configuration and never overwrites evidence', async () => {

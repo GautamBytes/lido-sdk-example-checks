@@ -63,5 +63,51 @@ preserves prior results and any known pending hashes, and exits nonzero.
 Successful withdrawal **submission** creates a request; it does not demonstrate
 the later claim. The report records the request ID and marks the claim as
 `awaiting-finalization` or `ready-not-tested`. Finalization is controlled by the
-protocol, and claim verification needs a separate transaction after that point.
-Do not present these three transactions as a completed withdrawal-and-claim cycle.
+protocol. Do not present these three transactions as a completed
+withdrawal-and-claim cycle.
+
+## Claim an existing test request
+
+Pass the original successful transaction report to select its request and wallet.
+Claim mode never repeats staking, wrapping, or withdrawal submission.
+
+```sh
+# Readiness check only; use the same HOODI_WALLET_FILE as the original run.
+npm run check:transactions -- \
+  --claim-report evidence/hoodi-transactions-20260908.json \
+  --output reports/claim-preflight.json
+
+# Claim only if finalized, unclaimed, and still owned by this wallet.
+npm run check:transactions -- --execute \
+  --claim-report evidence/hoodi-transactions-20260908.json \
+  --output reports/claim-result.json
+```
+
+Claim mode checks the source report's network, owner, request ID, and amount
+against current on-chain state. It needs at least 0.011 test ETH as a conservative
+gas reserve. It signs only `claimWithdrawals` for that one request on the reviewed
+Hoodi queue, with zero ETH value and the same gas/fee caps as the other tests.
+The SDK computes the checkpoint hint. Permit and message signing are disabled.
+
+A pending request produces `awaiting-finalization` with an empty transaction list.
+An already-claimed request produces `already-claimed`, also without signing.
+These expected states exit zero; they do **not** mean a claim test passed. Inspect
+the report status. `preflight-passed` means ready but execution was not requested.
+`passed` requires a successful new claim transaction and all postconditions below.
+
+After a claim, the runner verifies the receipt, request ID, decoded owner/receiver,
+positive ETH amount, and on-chain claimed/finalized flags. It reads the wallet's
+ETH balance at the block before the claim and at the claim block, and requires
+`balanceAfter - balanceBefore + gasUsed * effectiveGasPrice` to equal the decoded
+claimed amount. Use an isolated wallet without other transfers in that block;
+unrelated balance changes can invalidate this evidence check.
+
+Outputs retain the source report's digest and the new claim receipt and balance
+evidence. Historical reports are never rewritten. For another readiness check,
+use a new output path. If a previous claim attempt has a signed or broadcast hash,
+inspect that transaction before any new execution attempt. The command does not
+schedule polling or automatically retry an interrupted claim.
+
+As of the September 8 run recorded in this repository, request 5019 remains
+unfinalized. The claim runner's restrictions and result checks are covered by
+offline tests; a successful live claim receipt has not yet been recorded.

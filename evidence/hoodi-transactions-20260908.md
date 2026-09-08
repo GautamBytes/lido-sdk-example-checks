@@ -29,6 +29,9 @@ The report was generated from the working tree before the implementation was
 committed; its `project.dirty` field deliberately remains `true`. `checkerDigest`
 identifies the executed runner/policy files, and `lockfileDigest` identifies the
 dependency lockfile. The report has not been relabeled as a clean-checkout run.
+The tested runner was subsequently committed in
+[`14c83f9`](https://github.com/GautamBytes/lido-sdk-example-checks/tree/14c83f9b6b27a0e03d96e8f4b7ad37ba4c3cad2b);
+later changes to the runner do not alter this historical evidence.
 
 See [transaction verification](../docs/transaction-verification.md) for the
 bounded runner and instructions to reproduce using a separate test wallet.

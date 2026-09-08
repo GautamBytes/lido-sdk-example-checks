@@ -6,23 +6,26 @@ import { LidoSDK } from '@lidofinance/lido-ethereum-sdk';
 import { createPublicClient, createWalletClient, http, keccak256, parseAbi } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { hoodi } from 'viem/chains';
-import { TX_CONTRACTS, VALUE, WITHDRAW_VALUE, validateTransaction, validatePermit, checkReceipt } from './lib/transaction-policy.mjs';
+import { TX_CONTRACTS, VALUE, WITHDRAW_VALUE, validateTransaction, validatePermit, checkReceipt,
+  claimReadiness, checkClaimResult } from './lib/transaction-policy.mjs';
 import { digestFiles, gitIdentity } from './lib/sdk-build.mjs';
 
-const help = 'Usage: npm run check:transactions -- [--execute] [--output reports/hoodi-transactions.json]\nHOODI_WALLET_FILE must name a mode-600 test key file outside this repository. Default: preflight only.';
-let execute = false, output;
+const help = 'Usage: npm run check:transactions -- [--execute] [--claim-report original-run.json] [--output reports/result.json]\nHOODI_WALLET_FILE must name a mode-600 test key file outside this repository. Default: preflight only. Claim mode never repeats staking, wrapping, or withdrawal submission.';
+let execute = false, output, claimSource;
 const args = process.argv.slice(2);
 if (args.length === 1 && args[0] === '--help') { console.log(help); process.exit(0); }
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--execute' && !execute) execute = true;
   else if (args[i] === '--output' && !output && args[i + 1]?.endsWith('.json') && !args[i + 1].startsWith('--')) output = args[++i];
+  else if (args[i] === '--claim-report' && !claimSource && args[i + 1]?.endsWith('.json') && !args[i + 1].startsWith('--')) claimSource = resolve(args[++i]);
   else { console.error(help); process.exit(2); }
 }
-output = resolve(output ?? `reports/hoodi-${execute ? 'transactions' : 'preflight'}.json`);
+output = resolve(output ?? `reports/hoodi-${claimSource ? (execute ? 'claim' : 'claim-preflight') : (execute ? 'transactions' : 'preflight')}.json`);
 const root = fileURLToPath(new URL('..', import.meta.url));
-const report = { schemaVersion: 1, mode: execute ? 'hoodi-transactions' : 'hoodi-preflight',
+const report = { schemaVersion: 1, mode: claimSource ? 'hoodi-claim' : execute ? 'hoodi-transactions' : 'hoodi-preflight',
   generatedAt: new Date().toISOString(), status: 'running', chainId: hoodi.id, transactions: [],
-  limits: { stakeWei: VALUE.toString(), wrapWei: VALUE.toString(), withdrawalStETH: WITHDRAW_VALUE.toString() },
+  limits: { stakeWei: claimSource ? '0' : VALUE.toString(), wrapWei: claimSource ? '0' : VALUE.toString(),
+    withdrawalStETH: claimSource ? '0' : WITHDRAW_VALUE.toString() },
   claim: { status: 'not-tested' },
 };
 const json = (value) => JSON.stringify(value, (_, item) => typeof item === 'bigint' ? item.toString() : item, 2) + '\n';
@@ -48,6 +51,19 @@ try {
   try { account = privateKeyToAccount((await readFile(keyPath, 'utf8')).trim()); }
   catch { throw new Error('Could not load the test wallet key'); }
   report.account = account.address;
+  let claimExpected;
+  if (claimSource) {
+    const original = JSON.parse(await readFile(claimSource, 'utf8'));
+    assert.equal(original.mode, 'hoodi-transactions', 'Claim source must be a transaction-run report');
+    assert.equal(original.status, 'passed', 'Claim source must describe a successful withdrawal submission');
+    assert.equal(original.chainId, hoodi.id);
+    assert.equal(original.account.toLowerCase(), account.address.toLowerCase(), 'Claim wallet must match the original run');
+    claimExpected = { id: BigInt(original.withdrawal.id), owner: account.address,
+      amountOfStETH: BigInt(original.withdrawal.amountOfStETH) };
+    assert.ok(claimExpected.id > 0n);
+    assert.equal(claimExpected.amountOfStETH, WITHDRAW_VALUE);
+    report.claimSourceDigest = await digestFiles(dirname(claimSource), [relative(dirname(claimSource), claimSource)]);
+  }
   const rpcUrl = process.env.HOODI_RPC_URL ?? 'https://rpc.hoodi.ethpandaops.io';
   const client = createPublicClient({ chain: hoodi, transport: http(rpcUrl, { retryCount: 0, timeout: 10000 }) });
   assert.equal(await client.getChainId(), hoodi.id, 'RPC must be Hoodi');
@@ -64,27 +80,35 @@ try {
   }
   report.contracts = contracts;
   report.startBalanceWei = await client.getBalance({ address: account.address });
-  assert.ok(report.startBalanceWei >= 35000000000000000n, 'Fund the test wallet with at least 0.035 Hoodi ETH');
+  assert.ok(report.startBalanceWei >= (claimSource ? 11000000000000000n : 35000000000000000n),
+    claimSource ? 'Claim test wallet needs at least 0.011 Hoodi ETH for conservative gas bounds' : 'Fund the test wallet with at least 0.035 Hoodi ETH');
   assert.ok(!(await client.getCode({ address: account.address })), 'Use a fresh EOA, not a contract or delegated wallet');
   report.project = gitIdentity(root);
   report.sdkVersion = JSON.parse(await readFile(join(root, 'node_modules/@lidofinance/lido-ethereum-sdk/package.json'), 'utf8')).version;
   report.checkerDigest = await digestFiles(root, ['scripts/check-transactions.mjs', 'scripts/lib/transaction-policy.mjs', 'scripts/lib/live-read.mjs']);
   report.lockfileDigest = await digestFiles(root, ['package-lock.json']);
   report.preflight = 'passed';
+  let readiness;
+  if (claimExpected) {
+    const [status] = await sdkRead.withdraw.views.getWithdrawalStatus({ requestsIds: [claimExpected.id] });
+    readiness = claimReadiness(status, claimExpected);
+    report.withdrawal = status;
+    report.claim = { status: readiness, requestId: claimExpected.id };
+  }
   await save();
-  if (execute) {
+  if (execute && (!claimExpected || readiness === 'ready')) {
     const tokenAbi = parseAbi(['function balanceOf(address) view returns (uint256)', 'function sharesOf(address) view returns (uint256)']);
     const balance = (address, functionName = 'balanceOf') => client.readContract({ address, abi: tokenAbi, functionName, args: [account.address] });
-    for (const step of ['stake', 'wrap', 'withdraw']) {
+    for (const step of claimExpected ? ['claim'] : ['stake', 'wrap', 'withdraw']) {
       const record = { step, status: 'preparing' };
       report.transactions.push(record);
       await save();
-      const before = await balance(step === 'wrap' ? contracts.wstETH : contracts.stETH, step === 'wrap' ? 'balanceOf' : 'sharesOf');
+      const before = step === 'claim' ? null : await balance(step === 'wrap' ? contracts.wstETH : contracts.stETH, step === 'wrap' ? 'balanceOf' : 'sharesOf');
       let signed = false;
       const guardedAccount = { ...account,
         async signTransaction(transaction, options) {
           assert.ok(!signed, 'Only one transaction may be signed per step');
-          validateTransaction(transaction, step, account.address);
+          validateTransaction(transaction, step, account.address, claimExpected?.id);
           const serialized = await account.signTransaction(transaction, options);
           signed = true;
           record.signedHash = keccak256(serialized);
@@ -113,26 +137,40 @@ try {
       // Omit the account string so the SDK retains the guarded local signer.
       const transaction = step === 'stake' ? await sdk.stake.stakeEth({ value: VALUE, callback })
         : step === 'wrap' ? await sdk.wrap.wrapEth({ value: VALUE, callback })
+        : step === 'claim' ? await sdk.withdraw.claim.claimRequests({ requestsIds: [claimExpected.id], callback })
         : await sdk.withdraw.request.requestWithdrawalWithPermit({ amount: WITHDRAW_VALUE, token: 'stETH',
           deadline: BigInt(Math.floor(Date.now() / 1000) + 1800), callback });
       record.hash = transaction.hash;
+      assert.equal(transaction.hash, record.signedHash, 'Broadcast hash must match the locally signed transaction');
       checkReceipt(transaction, step, account.address);
       record.receipt = { blockNumber: transaction.receipt.blockNumber, blockHash: transaction.receipt.blockHash,
         status: transaction.receipt.status, gasUsed: transaction.receipt.gasUsed, effectiveGasPrice: transaction.receipt.effectiveGasPrice };
       record.result = transaction.result;
-      const after = await balance(step === 'wrap' ? contracts.wstETH : contracts.stETH, step === 'wrap' ? 'balanceOf' : 'sharesOf');
-      record.balanceCheck = { unit: step === 'wrap' ? 'wstETH base units' : 'stETH shares', before, after };
-      if (step === 'wrap') assert.equal(after - before, transaction.result.wstethReceived, 'wstETH balance change must match SDK result');
-      else if (step === 'stake') assert.ok(after > before && transaction.result.sharesReceived > 0n, 'Stake must increase stETH shares');
-      else {
-        assert.ok(after < before, 'Withdrawal must consume stETH shares');
-        assert.equal(transaction.result.requests.length, 1, 'Expected one withdrawal request');
-        const id = transaction.result.requests[0].requestId;
-        const [status] = await sdk.withdraw.views.getWithdrawalStatus({ requestsIds: [id] });
-        assert.equal(status.owner.toLowerCase(), account.address.toLowerCase(), 'Withdrawal owner mismatch');
-        assert.equal(status.amountOfStETH, WITHDRAW_VALUE, 'Withdrawal amount mismatch');
+      if (step === 'claim') {
+        const block = transaction.receipt.blockNumber;
+        const ethBefore = await client.getBalance({ address: account.address, blockNumber: block - 1n });
+        const ethAfter = await client.getBalance({ address: account.address, blockNumber: block });
+        const [status] = await sdk.withdraw.views.getWithdrawalStatus({ requestsIds: [claimExpected.id] });
+        checkClaimResult(transaction, status, account.address, claimExpected.id, ethBefore, ethAfter);
+        record.balanceCheck = { unit: 'ETH wei', beforeBlock: block - 1n, afterBlock: block, before: ethBefore, after: ethAfter,
+          gasCost: transaction.receipt.gasUsed * transaction.receipt.effectiveGasPrice };
         report.withdrawal = status;
-        report.claim = { status: status.isFinalized ? 'ready-not-tested' : 'awaiting-finalization', requestId: id };
+        report.claim = { status: 'passed', requestId: claimExpected.id };
+      } else {
+        const after = await balance(step === 'wrap' ? contracts.wstETH : contracts.stETH, step === 'wrap' ? 'balanceOf' : 'sharesOf');
+        record.balanceCheck = { unit: step === 'wrap' ? 'wstETH base units' : 'stETH shares', before, after };
+        if (step === 'wrap') assert.equal(after - before, transaction.result.wstethReceived, 'wstETH balance change must match SDK result');
+        else if (step === 'stake') assert.ok(after > before && transaction.result.sharesReceived > 0n, 'Stake must increase stETH shares');
+        else {
+          assert.ok(after < before, 'Withdrawal must consume stETH shares');
+          assert.equal(transaction.result.requests.length, 1, 'Expected one withdrawal request');
+          const id = transaction.result.requests[0].requestId;
+          const [status] = await sdk.withdraw.views.getWithdrawalStatus({ requestsIds: [id] });
+          assert.equal(status.owner.toLowerCase(), account.address.toLowerCase(), 'Withdrawal owner mismatch');
+          assert.equal(status.amountOfStETH, WITHDRAW_VALUE, 'Withdrawal amount mismatch');
+          report.withdrawal = status;
+          report.claim = { status: status.isFinalized ? 'ready-not-tested' : 'awaiting-finalization', requestId: id };
+        }
       }
       record.status = 'passed';
       await save();
@@ -140,7 +178,7 @@ try {
     }
     report.endBalanceWei = await client.getBalance({ address: account.address });
     report.status = 'passed';
-  } else report.status = 'preflight-passed';
+  } else report.status = readiness && readiness !== 'ready' ? readiness : 'preflight-passed';
 } catch (error) {
   report.status = 'failed';
   // SDK/RPC errors may include endpoint credentials or signed payloads.

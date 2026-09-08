@@ -13,7 +13,10 @@ https://github.com/lidofinance/lido-ethereum-sdk/tree/14d3236ff91fdb5c783c11abf0
 
 These are documentation usability problems, not evidence of a protocol security
 vulnerability. The getter check isolates the call because earlier import and
-network failures otherwise mask it. No transaction has been sent.
+network failures otherwise mask it. The original documentation reproduction is
+offline and sends no transactions. Subsequent, separate
+[Hoodi verification](../evidence/hoodi-transactions-20260908.md) recorded staking,
+wrapping, and withdrawal-submission receipts using a guarded local signer.
 
 The expanded pass also found missing imports/inputs when snippets are treated as
 independent modules, plus access to a possibly absent withdrawal transaction result.
@@ -48,10 +51,17 @@ client/network mismatch. Tests and reported results use the actual observed
   That is a bounded inspection finding, not a claim about every possible check.
 - `examples/rewards` already contains accounting examples. Replacing that package
   with another dashboard or duplicating the SDK is outside this project.
-- GitHub's open-pull listing returned PR #385, `v4.9.0`, at audit time; the open
-  issues endpoint returned the same PR and no separate issue records. This is
-  recorded in `evidence/open-work.json`. Titles alone cannot exclude overlapping
-  work on other branches. A maintainer must confirm ownership and desired scope.
+- The initial listing is preserved in `evidence/open-work.json`. The later
+  [upstream review](../evidence/upstream-review-20260908.json) checks all five
+  public branch tips and the complete changed-file list of open PR #385,
+  `v4.9.0`. The three target documents match the audited snapshots on `develop`,
+  `main`, and `chore/dependabot`; both patches apply and reproduce the checked
+  examples there. Two older branches have divergent or missing documentation
+  and do not accept these patches. None of
+  PR #385's 33 changed files is a patch target. The review also checks recent
+  closed PR titles and documentation history, without claiming an exhaustive
+  closed-work, fork, or private-work search. See the
+  [contribution package](upstream-contribution.md) for the target and commands.
 - CODEOWNERS identifies `@lidofinance/lido-si` for the SDK and a separate workflow
   review team. No team member has been contacted.
 
@@ -76,9 +86,15 @@ See [coverage](coverage.md) for exactly which Markdown blocks and RPC paths are
 checked. The original ten-test log is retained as the initial milestone.
 
 The snapshot hashes and patch application are checked as part of the suite.
-The proof uses deterministic fixtures for the external RPC boundary. It does
-not validate current endpoint availability, on-chain deployment state, browser
-wallet behavior, signing, or real transaction execution.
+The offline proof uses deterministic fixtures for the external RPC boundary;
+it does not validate live endpoint availability or on-chain state. Separate
+[live read checks](live-verification.md) verify deployed state at a finalized
+block, and the [transaction runner](transaction-verification.md) has recorded
+local signing, a withdrawal permit, and three mined transaction outcomes.
+Those receipts establish the recorded outcomes at their blocks, not continuing
+endpoint availability. The live runner calls SDK methods directly; it does not
+execute the exact Markdown transaction wrappers or browser wallet connection
+flows. A successful live withdrawal claim has not yet been recorded here.
 
 ## Dependency audit
 

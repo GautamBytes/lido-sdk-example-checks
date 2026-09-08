@@ -27,16 +27,19 @@ documentation and its verification; it does not introduce a new SDK network guar
 
 ## Run
 
-Requires Node.js 22+ and Git. From a fresh clone:
+Requires Node.js 22+ and Git. The shortest review path is:
 
 ```sh
+git clone https://github.com/GautamBytes/lido-sdk-example-checks.git
+cd lido-sdk-example-checks
 npm ci --ignore-scripts
-npm run check
-npm run check:docs
-npm run reproduce
-npm run demo
 npm run verify -- --output reports/released.json
 ```
+
+`verify` runs the typechecks, complete test suite, before/after reproduction, and
+initialization demo, then writes `reports/released.json` and `.md`. For only the
+network-mismatch demonstration, run `npm run reproduce`. See the
+[review guide](docs/reviewer-guide.md) for the three findings and expected results.
 
 Dependency installation needs internet access. The commands above then run without
 an RPC URL, API key, wallet, or funds. The balance fixture returns exactly 1 ETH;
@@ -58,7 +61,8 @@ For actual testnet transactions, see [transaction verification](docs/transaction
 The separate `check:transactions` command requires an isolated funded Hoodi wallet
 and `--execute` before it signs or broadcasts. It records receipts and balance changes.
 The [September 8 Hoodi run](evidence/hoodi-transactions-20260908.md) includes successful
-staking, wrapping, and withdrawal-submission receipts. The later claim is pending.
+staking, wrapping, and withdrawal-submission receipts. That report does not
+include a later claim receipt.
 
 Expected reproduction output:
 
@@ -75,6 +79,8 @@ upstream failures also pass when those expected failures are reproduced.
 
 | Material | Purpose |
 | --- | --- |
+| [Review guide](docs/reviewer-guide.md) | Short failure → patch → passing-check path and evidence boundaries |
+| [Contribution package](docs/upstream-contribution.md) | Verified upstream targets, patch scope, and proposed contribution text |
 | [Audit](docs/audit.md) | Findings, existing coverage, overlap review, limitations |
 | [Evidence manifest](evidence/manifest.json) | Exact upstream commit, versions, source hashes |
 | [Patch](patches/0001-readme-hoodi-chain-id.patch) | Minimal upstream README correction |
@@ -130,8 +136,8 @@ files are outside this typechecking scope. Transaction functions are typechecked
 but never called in the offline suite. The separate `check:live` command verifies
 live read paths only. The opt-in transaction runner separately verifies local
 signing and staking/wrapping/withdrawal-submission outcomes. A claim-only mode is
-available once the request finalizes; the recorded request is still waiting for
-a live claim test. Browser wallet flows remain outside these checks.
+available once the request finalizes. No live claim receipt has been recorded
+here yet. Browser wallet flows remain outside these checks.
 
 ## License
 

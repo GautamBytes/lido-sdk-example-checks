@@ -2,7 +2,8 @@
 
 ## Selected documentation
 
-The manifest in `examples/manifest.json` is the explicit selection. Each snippet
+The table below describes the offline Markdown checks. The manifest in
+`examples/manifest.json` is the explicit selection. Each snippet
 is extracted without injecting imports, `any` types, global wallet declarations,
 or type-error suppressions. Imports and function inputs appear in the Markdown.
 
@@ -71,6 +72,10 @@ decide whether to keep this separate check or port the manifest, extraction, and
 typechecking helpers into the SDK's own dependency/build workflow. No upstream
 workflow or pull request has been published by this project.
 
+The [contribution package](upstream-contribution.md) records the current upstream
+overlap review, separates the minimal README fix from the broader example edits,
+and provides commands to reproduce failures before applying the patches.
+
 ## Troubleshooting
 
 | Result | Meaning and next step |
@@ -92,10 +97,17 @@ have execution checks but not full typechecking. Dependency declarations use
 The extractor supports the column-zero triple-backtick TypeScript fences used
 by these files, not every Markdown dialect.
 
-Browser connection flows, account authorization, permit signing, staking limits,
-transaction sending, and mining are not exercised. The offline suite does not
-contact live RPCs or verify deployment state. The separate opt-in
-[Hoodi checker](live-verification.md) verifies deployed read paths at one block.
-Transaction functions explicitly require a provider/account and must be invoked
-by the consuming application. A successful import does not prove that sending
-those transactions will succeed.
+The offline Markdown suite does not exercise browser connection flows, account
+authorization, permit signing, live staking limits, transaction sending, or
+mining. It does not contact live RPCs or verify deployment state. The separate
+opt-in [Hoodi checker](live-verification.md) verifies deployed read paths at one
+block. The [transaction runner](transaction-verification.md) separately exercises
+a guarded local signer, a withdrawal permit, and mined staking, wrapping, and
+withdrawal-submission transactions; see the
+[recorded receipts](../evidence/hoodi-transactions-20260908.md).
+
+The live runner invokes SDK methods directly rather than the exported Markdown
+transaction functions. Those functions require a provider/account supplied by
+the consuming application. Their typechecks and successful imports do not prove
+browser wallet behavior or transaction success. A live claim receipt and
+exhaustive staking-limit coverage remain outside the recorded evidence.

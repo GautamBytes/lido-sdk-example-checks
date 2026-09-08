@@ -1,0 +1,292 @@
+{
+  "checkedAt": "2026-09-08T13:06:52.787Z",
+  "repository": "https://github.com/lidofinance/lido-ethereum-sdk",
+  "defaultBranch": "develop",
+  "auditedCommit": "14d3236ff91fdb5c783c11abf0f50f063cb942cb",
+  "scope": "All five advertised public branch tips, the only open pull request and its complete changed-file list; 30 most recently updated closed PR titles and basic-examples path history reviewed as context. Not an exhaustive closed-PR diff, deleted-branch, fork, or private-work search.",
+  "branches": [
+    {
+      "branch": "develop",
+      "commit": "14d3236ff91fdb5c783c11abf0f50f063cb942cb",
+      "commitDate": "2026-09-03T15:28:55+02:00",
+      "files": [
+        {
+          "path": "README.md",
+          "present": true,
+          "sha256": "4884d0eea615ce3a8f9a3938a0d969ffc8c2ac4256711d5f5bcbf36789e2db35",
+          "matchesAuditedSnapshot": true
+        },
+        {
+          "path": "docs/sdk/get-started/usage.md",
+          "present": true,
+          "sha256": "766af16e52de8d0fc8872deb7bfd9422f5850df64b32327744243c2616fbc505",
+          "matchesAuditedSnapshot": true
+        },
+        {
+          "path": "docs/sdk/get-started/basic-examples.md",
+          "present": true,
+          "sha256": "637af15714ab7fa0cde862c43fec4b099ac9b446bebd4425b503e7c4b7f640fa",
+          "matchesAuditedSnapshot": true
+        }
+      ],
+      "patches": [
+        {
+          "path": "patches/0001-readme-hoodi-chain-id.patch",
+          "applies": true,
+          "exitCode": 0
+        },
+        {
+          "path": "patches/0002-getting-started-examples.patch",
+          "applies": true,
+          "exitCode": 0
+        }
+      ],
+      "patchedFilesMatchCheckedExamples": true,
+      "assessment": "Same audited documents; both patches apply and reproduce checked examples."
+    },
+    {
+      "branch": "main",
+      "commit": "271c1fc394b96d138e434945c391229d4a730c1b",
+      "commitDate": "2026-05-19T11:58:20+02:00",
+      "files": [
+        {
+          "path": "README.md",
+          "present": true,
+          "sha256": "4884d0eea615ce3a8f9a3938a0d969ffc8c2ac4256711d5f5bcbf36789e2db35",
+          "matchesAuditedSnapshot": true
+        },
+        {
+          "path": "docs/sdk/get-started/usage.md",
+          "present": true,
+          "sha256": "766af16e52de8d0fc8872deb7bfd9422f5850df64b32327744243c2616fbc505",
+          "matchesAuditedSnapshot": true
+        },
+        {
+          "path": "docs/sdk/get-started/basic-examples.md",
+          "present": true,
+          "sha256": "637af15714ab7fa0cde862c43fec4b099ac9b446bebd4425b503e7c4b7f640fa",
+          "matchesAuditedSnapshot": true
+        }
+      ],
+      "patches": [
+        {
+          "path": "patches/0001-readme-hoodi-chain-id.patch",
+          "applies": true,
+          "exitCode": 0
+        },
+        {
+          "path": "patches/0002-getting-started-examples.patch",
+          "applies": true,
+          "exitCode": 0
+        }
+      ],
+      "patchedFilesMatchCheckedExamples": true,
+      "assessment": "Same audited documents; both patches apply and reproduce checked examples."
+    },
+    {
+      "branch": "chore/dependabot",
+      "commit": "a5bb675a85d5f1f80dcafb5c3ba8afaf3d97b264",
+      "commitDate": "2026-03-25T20:05:49+07:00",
+      "files": [
+        {
+          "path": "README.md",
+          "present": true,
+          "sha256": "4884d0eea615ce3a8f9a3938a0d969ffc8c2ac4256711d5f5bcbf36789e2db35",
+          "matchesAuditedSnapshot": true
+        },
+        {
+          "path": "docs/sdk/get-started/usage.md",
+          "present": true,
+          "sha256": "766af16e52de8d0fc8872deb7bfd9422f5850df64b32327744243c2616fbc505",
+          "matchesAuditedSnapshot": true
+        },
+        {
+          "path": "docs/sdk/get-started/basic-examples.md",
+          "present": true,
+          "sha256": "637af15714ab7fa0cde862c43fec4b099ac9b446bebd4425b503e7c4b7f640fa",
+          "matchesAuditedSnapshot": true
+        }
+      ],
+      "patches": [
+        {
+          "path": "patches/0001-readme-hoodi-chain-id.patch",
+          "applies": true,
+          "exitCode": 0
+        },
+        {
+          "path": "patches/0002-getting-started-examples.patch",
+          "applies": true,
+          "exitCode": 0
+        }
+      ],
+      "patchedFilesMatchCheckedExamples": true,
+      "assessment": "Same audited documents; both patches apply and reproduce checked examples."
+    },
+    {
+      "branch": "feature/si-2100-read-overview",
+      "commit": "1860135025bda58b0d1c4ba1a383dfff39042fe0",
+      "commitDate": "2026-01-28T11:56:39+01:00",
+      "files": [
+        {
+          "path": "README.md",
+          "present": true,
+          "sha256": "a9fc12913fe9e60c704298927106d5efd3ab24396672ce61c388655163d36379",
+          "matchesAuditedSnapshot": false
+        },
+        {
+          "path": "docs/sdk/get-started/usage.md",
+          "present": true,
+          "sha256": "6b10190f9112506e8e8122e82599fed670ef74c9dec3ee14142880b791281f3d",
+          "matchesAuditedSnapshot": false
+        },
+        {
+          "path": "docs/sdk/get-started/basic-examples.md",
+          "present": true,
+          "sha256": "738ad9306bfd9994f8b0e8e4894dba7894183927e774ecc765e074cc5c38c314",
+          "matchesAuditedSnapshot": false
+        }
+      ],
+      "patches": [
+        {
+          "path": "patches/0001-readme-hoodi-chain-id.patch",
+          "applies": false,
+          "exitCode": 1,
+          "diagnostics": "error: patch failed: README.md:67\nerror: README.md: patch does not apply"
+        },
+        {
+          "path": "patches/0002-getting-started-examples.patch",
+          "applies": false,
+          "exitCode": 1,
+          "diagnostics": "error: patch failed: docs/sdk/get-started/usage.md:52\nerror: docs/sdk/get-started/usage.md: patch does not apply\nerror: patch failed: docs/sdk/get-started/basic-examples.md:4\nerror: docs/sdk/get-started/basic-examples.md: patch does not apply"
+        }
+      ],
+      "patchedFilesMatchCheckedExamples": null,
+      "assessment": "Older divergent documentation; these patches are not applicable as-is. No compatibility claim."
+    },
+    {
+      "branch": "fix/populate-gas-limit",
+      "commit": "3577e5161ecd6c64358733705cb439d94f827506",
+      "commitDate": "2024-06-19T18:47:09+07:00",
+      "files": [
+        {
+          "path": "README.md",
+          "present": true,
+          "sha256": "abce0b1253602ef67ada2c95a8a6b856890bae9c51e363108a1a334f77f4935f",
+          "matchesAuditedSnapshot": false
+        },
+        {
+          "path": "docs/sdk/get-started/usage.md",
+          "present": false,
+          "matchesAuditedSnapshot": false
+        },
+        {
+          "path": "docs/sdk/get-started/basic-examples.md",
+          "present": false,
+          "matchesAuditedSnapshot": false
+        }
+      ],
+      "patches": [
+        {
+          "path": "patches/0001-readme-hoodi-chain-id.patch",
+          "applies": false,
+          "exitCode": 1,
+          "diagnostics": "error: patch failed: README.md:67\nerror: README.md: patch does not apply"
+        },
+        {
+          "path": "patches/0002-getting-started-examples.patch",
+          "applies": false,
+          "exitCode": 1,
+          "diagnostics": "error: docs/sdk/get-started/usage.md: No such file or directory\nerror: docs/sdk/get-started/basic-examples.md: No such file or directory"
+        }
+      ],
+      "patchedFilesMatchCheckedExamples": null,
+      "assessment": "Older divergent documentation; these patches are not applicable as-is. No compatibility claim."
+    }
+  ],
+  "openPulls": [
+    {
+      "number": 385,
+      "title": "v4.9.0",
+      "url": "https://github.com/lidofinance/lido-ethereum-sdk/pull/385",
+      "head": "14d3236ff91fdb5c783c11abf0f50f063cb942cb",
+      "base": "271c1fc394b96d138e434945c391229d4a730c1b",
+      "changedFiles": [
+        ".github/workflows/checks.yml",
+        ".github/workflows/deploy-pages.yml",
+        ".github/workflows/publish-alpha.yml",
+        ".github/workflows/publish-dry-run.yml",
+        ".github/workflows/publish.yml",
+        "docs/sdk/get-started/error-codes.md",
+        "packages/sdk/CHANGELOG.md",
+        "packages/sdk/README.md",
+        "packages/sdk/jest.config.ts",
+        "packages/sdk/package.json",
+        "packages/sdk/src/common/decorators/cache.ts",
+        "packages/sdk/src/common/utils/sdk-error.ts",
+        "packages/sdk/src/core/__tests__/core-contract-address-manifest.test.ts",
+        "packages/sdk/src/core/core.ts",
+        "packages/sdk/src/core/types.ts",
+        "packages/sdk/src/l2/__test__/l2.test.ts",
+        "packages/sdk/src/statistics/__tests__/stats.test.ts",
+        "packages/sdk/src/stvault/__tests__/vault-entity.test.ts",
+        "packages/sdk/src/stvault/consts/errors.ts",
+        "packages/sdk/src/stvault/consts/index.ts",
+        "packages/sdk/src/stvault/types.ts",
+        "packages/sdk/src/stvault/vault-entity.ts",
+        "packages/sdk/tests/fork-isolation.ts",
+        "packages/sdk/tests/global-setup.cjs",
+        "packages/sdk/tests/global-setup.ts",
+        "packages/sdk/tests/global-teardown.cjs",
+        "packages/sdk/tests/mocks/multiformats.mock.cjs",
+        "packages/sdk/tests/utils/fixtures/use-anvil-url.ts",
+        "packages/sdk/tests/utils/fixtures/use-l2.ts",
+        "packages/sdk/tests/utils/fixtures/use-mock-transport.ts",
+        "packages/sdk/tests/utils/fixtures/use-test-rpc-provider.ts",
+        "packages/sdk/vitest.config.ts",
+        "yarn.lock"
+      ],
+      "overlappingTargetFiles": []
+    }
+  ],
+  "documentationHistory": [
+    {
+      "path": "README.md",
+      "latestCommit": "d20b60f72f61c79be2080c56dc7d2718a956dd58"
+    },
+    {
+      "path": "docs/sdk/get-started/usage.md",
+      "latestCommit": "895cb5beb71df0a8b6ac8a90ddb4c80f4a1c159a"
+    },
+    {
+      "path": "docs/sdk/get-started/basic-examples.md",
+      "latestCommit": "d20b60f72f61c79be2080c56dc7d2718a956dd58"
+    }
+  ],
+  "targetValidation": {
+    "commit": "14d3236ff91fdb5c783c11abf0f50f063cb942cb",
+    "checkout": "Fresh complete upstream clone; only the supplied documentation patches applied.",
+    "sdk": "4.8.0",
+    "before": {
+      "exitCode": 1,
+      "diagnosticCodes": [
+        "TS18004",
+        "TS2305",
+        "TS2339",
+        "TS2719",
+        "TS2345",
+        "TS2304",
+        "TS2552"
+      ]
+    },
+    "after": {
+      "exitCode": 0,
+      "output": "Typechecked 8 documentation snippets against the installed SDK."
+    },
+    "diffCheckPassed": true
+  },
+  "limitations": [
+    "Branch inspection checks actual Git blob hashes and patch application; compiler validation is run on the complete develop checkout using published SDK 4.8.0. It does not build every branch SDK.",
+    "The main and chore/dependabot target documents are byte-identical to develop; older branches are not supported by these patches.",
+    "This records public technical overlap at the observation time, not maintainer endorsement or ownership approval."
+  ]
+}

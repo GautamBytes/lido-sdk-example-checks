@@ -5,8 +5,8 @@
 | Finding | Source at the audited commit | Reproduction | Status |
 | --- | --- | --- | --- |
 | Hoodi public client paired with chain ID 17000 | README.md, Initialization and Examples | Actual SDK 4.8.0 throws `INVALID_ARGUMENT: publicClient chain id 560048 does not match provided chain id 17000` | Two-line patch supplied; corrected construction and fixture balance read pass |
-| `hoodi` imported from `viem` instead of `viem/chains` | docs/sdk/get-started/basic-examples.md, Core example; similar imports in other snippets | ESM module linking fails: `does not provide an export named 'hoodi'` | Reproduced for Core; remaining affected snippets need individual checks |
-| Wrapping getter called on withdrawal module | docs/sdk/get-started/basic-examples.md, Wrap example | Isolated `lidoSDK.withdraw.getContractWstETH()` throws `is not a function`; `lidoSDK.wrap.getContractWstETH` exists | Reproduced API mismatch; replacement not exercised against a live contract |
+| `hoodi` imported from `viem` instead of `viem/chains` | docs/sdk/get-started/basic-examples.md, Core example; similar imports in other snippets | ESM module linking fails: `does not provide an export named 'hoodi'` | Corrected in selected snippets; strict TypeScript and mutation checks pass |
+| Wrapping getter called on withdrawal module | docs/sdk/get-started/basic-examples.md, Wrap example | Isolated `lidoSDK.withdraw.getContractWstETH()` throws `is not a function`; `lidoSDK.wrap.getContractWstETH` exists | Corrected getter resolves via the locator and reads the contract using deterministic RPC fixtures |
 
 Source permalink:
 https://github.com/lidofinance/lido-ethereum-sdk/tree/14d3236ff91fdb5c783c11abf0f50f063cb942cb
@@ -14,6 +14,11 @@ https://github.com/lidofinance/lido-ethereum-sdk/tree/14d3236ff91fdb5c783c11abf0
 These are documentation usability problems, not evidence of a protocol security
 vulnerability. The getter check isolates the call because earlier import and
 network failures otherwise mask it. No transaction has been sent.
+
+The expanded pass also found missing imports/inputs when snippets are treated as
+independent modules, plus access to a possibly absent withdrawal transaction result.
+The corrected examples supply explicit typed function arguments and guard that
+result. These are improvements to standalone usability, not separate SDK defects.
 
 ## Reproduction context and limits
 
@@ -63,6 +68,12 @@ technical failures, not their prevalence among SDK users.
 before replacing the network IDs. `evidence/after-fix.txt` records the corrected
 checks. Paths in stored logs are normalized to `<repo>`; results are otherwise
 preserved. Current authoritative results are produced by `npm run check` and CI.
+
+`evidence/expanded-before-fix.txt` retains selected direct compiler diagnostics
+from the eight original snippets; cascading generic-type errors are omitted.
+`evidence/expanded-after-fix.txt` records the expanded suite after correction.
+See [coverage](coverage.md) for exactly which Markdown blocks and RPC paths are
+checked. The original ten-test log is retained as the initial milestone.
 
 The snapshot hashes and patch application are checked as part of the suite.
 The proof uses deterministic fixtures for the external RPC boundary. It does

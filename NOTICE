@@ -8,8 +8,11 @@ at commit 14d3236ff91fdb5c783c11abf0f50f063cb942cb:
 - evidence/upstream/usage.md
 - evidence/upstream/basic-examples.md
 - examples/README.md
+- examples/usage.md
+- examples/basic-examples.md
 - src/initialize.ts
 - patches/0001-readme-hoodi-chain-id.patch
+- patches/0002-getting-started-examples.patch
 
 Copyright (c) 2024 Lido. MIT License.
 The full upstream license is preserved in licenses/Lido-MIT.txt.

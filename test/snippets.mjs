@@ -1,16 +1,13 @@
-import { readFile, mkdir, mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
+import { readSnippet } from '../scripts/lib/markdown.mjs';
 
 // Only execute the reviewed, committed snapshots in this repository.
 // This helper is not a sandbox for untrusted Markdown.
-export async function snippet(file, heading) {
-  const markdown = await readFile(file, 'utf8');
-  const section = markdown.split(`\n${heading}\n`)[1];
-  const code = section?.match(/```ts\r?\n([\s\S]*?)```/)?.[1];
-  if (!code) throw new Error(`Missing TypeScript snippet: ${file} / ${heading}`);
-  return code;
+export async function snippet(file, heading, index = 0) {
+  return (await readSnippet(file, heading, index)).code;
 }
 
 export async function execute(code) {

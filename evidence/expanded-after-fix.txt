@@ -1,0 +1,189 @@
+
+> lido-sdk-example-checks@0.1.0 check
+> npm run check:types && npm run check:docs && npm test
+
+
+> lido-sdk-example-checks@0.1.0 check:types
+> tsc --noEmit
+
+
+> lido-sdk-example-checks@0.1.0 check:docs
+> node scripts/check-docs.mjs
+
+Typechecked 8 documentation snippets against the installed SDK.
+
+> lido-sdk-example-checks@0.1.0 test
+> node --test test/*.test.mjs
+
+TAP version 13
+# Subtest: original README initialization reproduces the network mismatch
+ok 1 - original README initialization reproduces the network mismatch
+  ---
+  duration_ms: 60.784792
+  type: 'test'
+  ...
+# Subtest: corrected README second initialization uses the same client network
+ok 2 - corrected README second initialization uses the same client network
+  ---
+  duration_ms: 14.254333
+  type: 'test'
+  ...
+# Subtest: corrected initialization and balance read use actual SDK and viem with fixture RPC
+ok 3 - corrected initialization and balance read use actual SDK and viem with fixture RPC
+  ---
+  duration_ms: 26.254
+  type: 'test'
+  ...
+# Subtest: corrected README initialization constructs a Hoodi SDK
+ok 4 - corrected README initialization constructs a Hoodi SDK
+  ---
+  duration_ms: 8.353708
+  type: 'test'
+  ...
+# Subtest: SDK already rejects two supported but different client/SDK networks
+ok 5 - SDK already rejects two supported but different client/SDK networks
+  ---
+  duration_ms: 0.506042
+  type: 'test'
+  ...
+# Subtest: documented Core import reproduces missing hoodi export from viem
+ok 6 - documented Core import reproduces missing hoodi export from viem
+  ---
+  duration_ms: 8.779958
+  type: 'test'
+  ...
+# Subtest: documented wrapping getter is absent from the withdrawal module
+ok 7 - documented wrapping getter is absent from the withdrawal module
+  ---
+  duration_ms: 0.732
+  type: 'test'
+  ...
+# Subtest: snippet selection fails loudly if the documentation structure changes
+ok 8 - snippet selection fails loudly if the documentation structure changes
+  ---
+  duration_ms: 0.418459
+  type: 'test'
+  ...
+# Subtest: frozen source snapshots match the recorded upstream hashes
+ok 9 - frozen source snapshots match the recorded upstream hashes
+  ---
+  duration_ms: 2.964667
+  type: 'test'
+  ...
+# Subtest: external checkout fails original typechecks and accepts the documentation patches
+ok 10 - external checkout fails original typechecks and accepts the documentation patches
+  ---
+  duration_ms: 5005.669958
+  type: 'test'
+  ...
+# Subtest: upstream patch applies to the frozen README and yields the tested correction
+ok 11 - upstream patch applies to the frozen README and yields the tested correction
+  ---
+  duration_ms: 19.839708
+  type: 'test'
+  ...
+# Subtest: selects the second initialization fence without reusing the first
+ok 12 - selects the second initialization fence without reusing the first
+  ---
+  duration_ms: 13.436625
+  type: 'test'
+  ...
+# Subtest: missing fence cannot borrow code from the following section
+ok 13 - missing fence cannot borrow code from the following section
+  ---
+  duration_ms: 3.074792
+  type: 'test'
+  ...
+# Subtest: public-client documentation initializes without a wallet or RPC call
+ok 14 - public-client documentation initializes without a wallet or RPC call
+  ---
+  duration_ms: 441.283375
+  type: 'test'
+  ...
+# Subtest: RPC-URL documentation constructs the client without fetching
+ok 15 - RPC-URL documentation constructs the client without fetching
+  ---
+  duration_ms: 12.483208
+  type: 'test'
+  ...
+# Subtest: wallet documentation accepts an explicit provider without prompting it
+ok 16 - wallet documentation accepts an explicit provider without prompting it
+  ---
+  duration_ms: 34.089833
+  type: 'test'
+  ...
+# Subtest: separate-module documentation constructs and shares the same core
+ok 17 - separate-module documentation constructs and shares the same core
+  ---
+  duration_ms: 14.617958
+  type: 'test'
+  ...
+# Subtest: Core snippet reads an ETH balance through the actual SDK
+ok 18 - Core snippet reads an ETH balance through the actual SDK
+  ---
+  duration_ms: 175.390958
+  type: 'test'
+  ...
+# Subtest: Wrap snippet resolves the locator, creates the contract, and decodes its rate
+ok 19 - Wrap snippet resolves the locator, creates the contract, and decodes its rate
+  ---
+  duration_ms: 25.914583
+  type: 'test'
+  ...
+# Subtest: Withdraw snippet preserves request IDs and pending/finalized/claimed states
+ok 20 - Withdraw snippet preserves request IDs and pending/finalized/claimed states
+  ---
+  duration_ms: 28.13475
+  type: 'test'
+  ...
+# Subtest: Withdraw snippet handles an empty request list
+ok 21 - Withdraw snippet handles an empty request list
+  ---
+  duration_ms: 11.336916
+  type: 'test'
+  ...
+# Subtest: Withdraw snippet rejects malformed ABI data and mismatched result counts
+ok 22 - Withdraw snippet rejects malformed ABI data and mismatched result counts
+  ---
+  duration_ms: 31.393584
+  type: 'test'
+  ...
+# Subtest: read failures propagate to the caller instead of becoming fake success
+ok 23 - read failures propagate to the caller instead of becoming fake success
+  ---
+  duration_ms: 10.331
+  type: 'test'
+  ...
+# Subtest: Stake snippet can be imported without requesting a wallet or sending a transaction
+ok 24 - Stake snippet can be imported without requesting a wallet or sending a transaction
+  ---
+  duration_ms: 9.457792
+  type: 'test'
+  ...
+# Subtest: fixture rejects signing, broadcasts, and unknown read destinations
+ok 25 - fixture rejects signing, broadcasts, and unknown read destinations
+  ---
+  duration_ms: 0.280833
+  type: 'test'
+  ...
+# Subtest: eight selected documentation snippets typecheck as independent modules
+ok 26 - eight selected documentation snippets typecheck as independent modules
+  ---
+  duration_ms: 2704.676625
+  type: 'test'
+  ...
+# Subtest: restoring the bad viem import and wrong getter produces source-located errors
+ok 27 - restoring the bad viem import and wrong getter produces source-located errors
+  ---
+  duration_ms: 1923.063292
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5061.435541

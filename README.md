@@ -12,7 +12,10 @@ An independent community project.
 - Apply a two-line initialization fix and execute the corrected Markdown snippets.
 - Verify an ETH balance read through real SDK/viem code using a deterministic RPC fixture.
 - Reproduce two additional documentation errors: an invalid chain import and a
-  wrapping getter called on the wrong module.
+  wrapping getter called on the wrong module, with corrected examples for both.
+- Typecheck eight selected Markdown snippets as independent TypeScript modules.
+- Exercise wrap contract reads and pending/finalized/claimed withdrawal states
+  through the real SDK using deterministic RPC fixtures.
 - Check source snapshot integrity and patch application automatically.
 
 The SDK already rejects mismatched client/SDK networks. This project improves
@@ -25,6 +28,7 @@ Requires Node.js 22+ and Git. From a fresh clone:
 ```sh
 npm ci --ignore-scripts
 npm run check
+npm run check:docs
 npm run reproduce
 npm run demo
 ```
@@ -53,6 +57,10 @@ upstream failures also pass when those expected failures are reproduced.
 | [Patch](patches/0001-readme-hoodi-chain-id.patch) | Minimal upstream README correction |
 | [Corrected README snapshot](examples/README.md) | Exact document exercised by the tests |
 | [Standalone initialization](src/initialize.ts) | Complete, typechecked construction example |
+| [Usage examples](examples/usage.md) | Four checked initialization patterns |
+| [Basic examples](examples/basic-examples.md) | Core, staking, withdrawal, and wrapping examples |
+| [Coverage and integration](docs/coverage.md) | Exact coverage, external-checkout command, and troubleshooting |
+| [Getting-started patch](patches/0002-getting-started-examples.patch) | Corrections to the two upstream documentation pages |
 
 The original documentation is pinned to upstream commit
 [`14d3236`](https://github.com/lidofinance/lido-ethereum-sdk/tree/14d3236ff91fdb5c783c11abf0f50f063cb942cb)
@@ -65,20 +73,28 @@ To inspect/apply the patch in a separate SDK checkout at that commit:
 ```sh
 git apply --check /path/to/lido-sdk-example-checks/patches/0001-readme-hoodi-chain-id.patch
 git apply /path/to/lido-sdk-example-checks/patches/0001-readme-hoodi-chain-id.patch
+git apply --check /path/to/lido-sdk-example-checks/patches/0002-getting-started-examples.patch
+git apply /path/to/lido-sdk-example-checks/patches/0002-getting-started-examples.patch
 ```
 
 ## Coverage and next steps
 
-The project includes source snapshots, two README corrections, and a local
-verification harness. The invalid imports and wrapping getter in the other
-documents are reproduced but not yet patched here. Next steps are to repair
-those snippets, expand TypeScript coverage, and make the checks suitable for
-the upstream documentation workflow.
+The project includes source snapshots, two upstream documentation patches,
+eight typechecked snippets, and execution checks for initialization and three
+read paths. The suite also restores the wrong import/getter in temporary copies
+and verifies that the compiler catches them. An external-checkout test confirms
+the original documents fail and their patched versions pass.
+
+Upstream integration and review remain separate from this repository's passing
+CI. The checker can target a separate checkout using `--docs-root`; it uses the
+SDK installed in this project, not an automatically built SDK from that checkout.
 
 Tests execute only reviewed, committed Markdown; the helper is not a sandbox for
-arbitrary documents. TypeScript typechecking currently covers `src/initialize.ts`.
-Markdown fixtures are transpiled and executed, not comprehensively typechecked.
-No live-chain or transaction-signing behavior is covered by this proof of work.
+arbitrary documents. TypeScript checks `src/initialize.ts` and the eight snippets
+listed in `examples/manifest.json`. The two root README fragments retain their
+original runtime-only checks. Unselected Markdown blocks and dependency declaration
+files are outside this typechecking scope. Transaction functions are typechecked
+but never called in the suite; no live-chain or signing behavior is verified.
 
 ## License
 

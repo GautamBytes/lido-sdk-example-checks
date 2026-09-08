@@ -1,0 +1,164 @@
+---
+sidebar_position: 1
+---
+
+# Usage
+
+## Import
+
+To get started with the Lido Ethereum SDK, you need to import the necessary modules. You can use CJS or ES6+ imports. Import from root package or each module separately to improve on bundle size.
+
+```ts
+// CSJ
+const { LidoSDK } = require('@lidofinance/lido-ethereum-sdk');
+// or
+const { LidoSDKStake } = require('@lidofinance/lido-ethereum-sdk/stake');
+// or
+```
+
+```ts
+// ES6+, all other modules are available from root
+import { LidoSDK, LidoSDKStake } from '@lidofinance/lido-ethereum-sdk';
+
+// Full list of separate imports
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk/core';
+import { LidoSDKStake } from '@lidofinance/lido-ethereum-sdk/stake';
+import { LidoSDKWithdraw } from '@lidofinance/lido-ethereum-sdk/withdraw';
+import { LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk/wrap';
+import {
+  LidoSDKstETH,
+  LidoSDKwstETH,
+} from '@lidofinance/lido-ethereum-sdk/erc20';
+import { LidoSDKUnstETH } from '@lidofinance/lido-ethereum-sdk/unsteth';
+import { LidoSDKShares } from '@lidofinance/lido-ethereum-sdk/shares';
+import { LidoSDKStatistics } from '@lidofinance/lido-ethereum-sdk/statistics';
+import { LidoSDKRewards } from '@lidofinance/lido-ethereum-sdk/rewards';
+```
+
+## Initialization
+
+Before using the SDK, you need to create an instance of the LidoSDK class:
+
+Pass your own viem PublicClient:
+
+```ts
+import { LidoSDK } from '@lidofinance/lido-ethereum-sdk';
+import { createPublicClient, http } from 'viem';
+import { hoodi } from 'viem/chains';
+
+const publicClient = createPublicClient({
+  chain: hoodi,
+  transport: http('<RPC_URL>'),
+});
+const sdk = new LidoSDK({
+  publicClient,
+});
+```
+
+or let the SDK create it for you by passing RPC URL(s):
+
+```ts
+import { LidoSDK } from '@lidofinance/lido-ethereum-sdk';
+// viem is still required as peer dependency for inner workings of SDK
+import { hoodi } from 'viem/chains';
+
+const sdk = new LidoSDK({
+  // chainId must be provided explicitly when supplying RPC URLs
+  chainId: hoodi.id,
+  // multiple RPC URLs are supported and used in viem's fallback transport
+  rpcUrls: ['<RPC_URL>'],
+});
+```
+
+Replace `<RPC_URL>` with the address of your Ethereum provider.
+
+## With walletClient
+
+In order to access transaction signing functionality you need to provide viem WalletClient instance. Accessing web3 methods without walletClient will result in error.
+
+We support account hoisting as per Viem `WalletClient`, so passing account is not required for transactions and related functions.
+Some functions don't usually require walletClient to be present like `simulate...` or `populate..` but **not passing an account** to them will result in **request to walletClient** and an **error if it is missing**.
+
+```ts
+import { LidoSDK } from '@lidofinance/lido-ethereum-sdk';
+import {
+  createWalletClient,
+  createPublicClient,
+  custom,
+  http,
+  type EIP1193Provider,
+} from 'viem';
+import { hoodi } from 'viem/chains';
+
+const publicClient = createPublicClient({
+  chain: hoodi,
+  transport: http('<RPC_URL>'),
+});
+
+// Pass the EIP-1193 provider returned by your browser wallet connection flow.
+// Call this after the wallet is connected to Hoodi; construction does not sign.
+export function createWalletSdk(provider: EIP1193Provider) {
+  const walletClient = createWalletClient({
+    chain: hoodi,
+    transport: custom(provider),
+  });
+
+  return new LidoSDK({
+    chainId: hoodi.id,
+    publicClient,
+    walletClient,
+  });
+}
+```
+
+## Separate modules
+
+Every SDK module needs `LidoSDKCore` to function. You can pass same arguments as to `LidoSDKCore` constructor to create it under the hood or pass existing instance. This allows you to build up your SDK only out of parts you need.
+
+```ts
+import { LidoSDKStake } from '@lidofinance/lido-ethereum-sdk/stake';
+import { LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk/wrap';
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk/core';
+
+import { http, createPublicClient } from 'viem';
+import { hoodi } from 'viem/chains';
+
+const params = {
+  publicClient: createPublicClient({
+    chain: hoodi,
+    transport: http('<RPC_URL>'),
+  }),
+};
+// core is created under the hood
+const stake = new LidoSDKStake(params);
+
+// or core is created separately and passed to modules individually
+const core = new LidoSDKCore(params);
+const wrap = new LidoSDKWrap({ core });
+```
+
+## Typescript and Type Registration
+
+The SDK is written fully in TypeScript, each module exports helper types, specific types for ABIs and contract instances.
+
+### Type Registration
+
+To get the best experience with Lido Ethereum SDK you can register `viem` types for `PublicClient` and `WalletClient`. This will allow you to take full advantage of viem type safety mechanisms and get better DX when working with the SDK. Specifically when accessing underlying clients and contract instances.
+
+After Registration `sdk.publicClient` and `sdk.walletClient` will be typed as your custom clients with all the helper methods and types provided by viem.
+Same types will be used in contracts instances types.
+
+```ts
+// In your project
+
+type MyPublicClient = ReturnType<typeof myPublicClient>;
+type MyWalletClient = ReturnType<typeof myWalletClient>;
+
+// global registration for client types used by Lido SDK
+declare module '@lidofinance/lido-ethereum-sdk' {
+  interface ClientRegister {
+    publicClient: MyPublicClient;
+    walletClient: MyWalletClient;
+  }
+}
+```

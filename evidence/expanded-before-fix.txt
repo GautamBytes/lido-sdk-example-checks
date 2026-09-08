@@ -1,0 +1,24 @@
+Selected direct diagnostics before correcting the eight snippets.
+Cascading generic-type diagnostics omitted; source paths are relative.
+
+examples/usage.md:55:3 [public-client] TS18004: No value exists in scope for the shorthand property 'walletClient'. Either declare one or provide an initializer.
+examples/usage.md:90:3 [wallet-client] TS2305: Module '"viem"' has no exported member 'hoodi'.
+examples/usage.md:100:28 [wallet-client] TS2339: Property 'ethereum' does not exist on type 'Window & typeof globalThis'.
+examples/usage.md:122:3 [separate-modules] TS2305: Module '"viem"' has no exported member 'hoodi'.
+examples/basic-examples.md:11:36 [core] TS2305: Module '"viem"' has no exported member 'hoodi'.
+examples/basic-examples.md:22:50 [core] TS2304: Cannot find name 'address'.
+examples/basic-examples.md:30:38 [stake] TS2305: Module '"viem"' has no exported member 'hoodi'.
+examples/basic-examples.md:32:21 [stake] TS2552: Cannot find name 'LidoSDK'. Did you mean 'lidoSDK'?
+examples/basic-examples.md:36:16 [stake] TS2304: Cannot find name 'http'.
+examples/basic-examples.md:40:30 [stake] TS2339: Property 'ethereum' does not exist on type 'Window & typeof globalThis'.
+examples/basic-examples.md:50:3 [stake] TS18004: No value exists in scope for the shorthand property 'value'. Either declare one or provide an initializer.
+examples/basic-examples.md:51:3 [stake] TS18004: No value exists in scope for the shorthand property 'callback'. Either declare one or provide an initializer.
+examples/basic-examples.md:52:3 [stake] TS18004: No value exists in scope for the shorthand property 'referralAddress'. Either declare one or provide an initializer.
+examples/basic-examples.md:66:3 [withdraw] TS2305: Module '"viem"' has no exported member 'hoodi'.
+examples/basic-examples.md:71:21 [withdraw] TS2552: Cannot find name 'LidoSDK'. Did you mean 'lidoSDK'?
+examples/basic-examples.md:79:30 [withdraw] TS2339: Property 'ethereum' does not exist on type 'Window & typeof globalThis'.
+examples/basic-examples.md:107:3 [wrap] TS2305: Module '"viem"' has no exported member 'hoodi'.
+examples/basic-examples.md:112:21 [wrap] TS2552: Cannot find name 'LidoSDK'. Did you mean 'lidoSDK'?
+examples/basic-examples.md:120:30 [wrap] TS2339: Property 'ethereum' does not exist on type 'Window & typeof globalThis'.
+examples/basic-examples.md:130:3 [wrap] TS18004: No value exists in scope for the shorthand property 'value'. Either declare one or provide an initializer.
+examples/basic-examples.md:131:3 [wrap] TS18004: No value exists in scope for the shorthand property 'account'. Either declare one or provide an initializer.

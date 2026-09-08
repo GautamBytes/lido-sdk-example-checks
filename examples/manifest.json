@@ -1,0 +1,10 @@
+[
+  { "id": "public-client", "file": "examples/usage.md", "upstream": "docs/sdk/get-started/usage.md", "heading": "## Initialization", "index": 0 },
+  { "id": "rpc-urls", "file": "examples/usage.md", "upstream": "docs/sdk/get-started/usage.md", "heading": "## Initialization", "index": 1 },
+  { "id": "wallet-client", "file": "examples/usage.md", "upstream": "docs/sdk/get-started/usage.md", "heading": "## With walletClient" },
+  { "id": "separate-modules", "file": "examples/usage.md", "upstream": "docs/sdk/get-started/usage.md", "heading": "## Separate modules" },
+  { "id": "core", "file": "examples/basic-examples.md", "upstream": "docs/sdk/get-started/basic-examples.md", "heading": "## Core example" },
+  { "id": "stake", "file": "examples/basic-examples.md", "upstream": "docs/sdk/get-started/basic-examples.md", "heading": "## Stake example" },
+  { "id": "withdraw", "file": "examples/basic-examples.md", "upstream": "docs/sdk/get-started/basic-examples.md", "heading": "## Withdraw example" },
+  { "id": "wrap", "file": "examples/basic-examples.md", "upstream": "docs/sdk/get-started/basic-examples.md", "heading": "## Wrap example" }
+]

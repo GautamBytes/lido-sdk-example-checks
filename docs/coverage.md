@@ -93,7 +93,9 @@ The extractor supports the column-zero triple-backtick TypeScript fences used
 by these files, not every Markdown dialect.
 
 Browser connection flows, account authorization, permit signing, staking limits,
-transaction sending, mining, live RPCs, and deployment state are not exercised.
+transaction sending, and mining are not exercised. The offline suite does not
+contact live RPCs or verify deployment state. The separate opt-in
+[Hoodi checker](live-verification.md) verifies deployed read paths at one block.
 Transaction functions explicitly require a provider/account and must be invoked
 by the consuming application. A successful import does not prove that sending
 those transactions will succeed.

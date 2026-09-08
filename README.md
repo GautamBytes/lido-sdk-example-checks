@@ -19,6 +19,7 @@ An independent community project.
 - Check source snapshot integrity and patch application automatically.
 - Build the actual upstream SDK in isolation and run the same suite against it.
 - Produce JSON/Markdown reports with SDK provenance, artifact hashes, and test results.
+- Run opt-in Hoodi checks against deployed contracts at one finalized block.
 
 The SDK already rejects mismatched client/SDK networks. This project improves
 documentation and its verification; it does not introduce a new SDK network guard.
@@ -39,6 +40,18 @@ npm run verify -- --output reports/released.json
 Dependency installation needs internet access. The commands above then run without
 an RPC URL, API key, wallet, or funds. The balance fixture returns exactly 1 ETH;
 it is synthetic test data, not a live account balance.
+
+To check live Hoodi state using the public ethPandaOps RPC:
+
+```sh
+npm run check:live
+```
+
+This needs internet access but no wallet, key, or funds. It verifies the network,
+deployed contracts, a public contract's ETH balance, the wrapping rate, and one
+existing withdrawal request. It writes `reports/hoodi-live.json` and `.md`.
+See [live verification](docs/live-verification.md) for endpoint configuration,
+report interpretation, and the manual GitHub Actions workflow.
 
 Expected reproduction output:
 
@@ -107,7 +120,8 @@ arbitrary documents. TypeScript checks `src/initialize.ts` and the eight snippet
 listed in `examples/manifest.json`. The two root README fragments retain their
 original runtime-only checks. Unselected Markdown blocks and dependency declaration
 files are outside this typechecking scope. Transaction functions are typechecked
-but never called in the suite; no live-chain or signing behavior is verified.
+but never called in the offline suite. The separate `check:live` command verifies
+live read paths only; wallet signing and transaction outcomes remain untested.
 
 ## License
 

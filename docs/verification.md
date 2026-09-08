@@ -65,8 +65,10 @@ a wrong getter, and a mismatch between two supported networks.
 The source build uses the dependency versions in this project's lockfile. It does
 not reproduce the upstream Yarn lockfile, build CommonJS/playground/documentation
 sites, or run upstream's complete Anvil/RPC-based suite. The report describes an
-ESM SDK source build plus this project's example checks. Live networks, wallet
-signing, transaction broadcasting, and on-chain outcomes remain outside coverage.
+ESM SDK source build plus this project's example checks. These two verification
+targets remain offline. The separate [live Hoodi command](live-verification.md)
+checks deployed read paths; wallet signing, broadcasting, and transaction outcomes
+remain outside coverage.
 
 Only run source mode on a checkout you trust: source code is compiled and then
 executed by the verification suite. A dirty source checkout is supported but is

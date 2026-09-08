@@ -1,0 +1,82 @@
+
+> lido-sdk-example-checks@0.1.0 check
+> npm run check:types && npm test
+
+
+> lido-sdk-example-checks@0.1.0 check:types
+> tsc --noEmit
+
+
+> lido-sdk-example-checks@0.1.0 test
+> node --test test/*.test.mjs
+
+TAP version 13
+# Subtest: original README initialization reproduces the network mismatch
+ok 1 - original README initialization reproduces the network mismatch
+  ---
+  duration_ms: 40.152792
+  type: 'test'
+  ...
+# Subtest: corrected README second initialization uses the same client network
+ok 2 - corrected README second initialization uses the same client network
+  ---
+  duration_ms: 8.428709
+  type: 'test'
+  ...
+# Subtest: corrected initialization and balance read use actual SDK and viem with fixture RPC
+ok 3 - corrected initialization and balance read use actual SDK and viem with fixture RPC
+  ---
+  duration_ms: 18.680042
+  type: 'test'
+  ...
+# Subtest: corrected README initialization constructs a Hoodi SDK
+ok 4 - corrected README initialization constructs a Hoodi SDK
+  ---
+  duration_ms: 6.556
+  type: 'test'
+  ...
+# Subtest: SDK already rejects two supported but different client/SDK networks
+ok 5 - SDK already rejects two supported but different client/SDK networks
+  ---
+  duration_ms: 0.186791
+  type: 'test'
+  ...
+# Subtest: documented Core import reproduces missing hoodi export from viem
+ok 6 - documented Core import reproduces missing hoodi export from viem
+  ---
+  duration_ms: 6.9595
+  type: 'test'
+  ...
+# Subtest: documented wrapping getter is absent from the withdrawal module
+ok 7 - documented wrapping getter is absent from the withdrawal module
+  ---
+  duration_ms: 0.540375
+  type: 'test'
+  ...
+# Subtest: snippet selection fails loudly if the documentation structure changes
+ok 8 - snippet selection fails loudly if the documentation structure changes
+  ---
+  duration_ms: 0.173083
+  type: 'test'
+  ...
+# Subtest: frozen source snapshots match the recorded upstream hashes
+ok 9 - frozen source snapshots match the recorded upstream hashes
+  ---
+  duration_ms: 3.548584
+  type: 'test'
+  ...
+# Subtest: upstream patch applies to the frozen README and yields the tested correction
+ok 10 - upstream patch applies to the frozen README and yields the tested correction
+  ---
+  duration_ms: 38.106667
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 820.914292

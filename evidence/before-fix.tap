@@ -1,0 +1,103 @@
+TAP version 13
+# Subtest: original README initialization reproduces the network mismatch
+ok 1 - original README initialization reproduces the network mismatch
+  ---
+  duration_ms: 199.013333
+  type: 'test'
+  ...
+# Subtest: corrected README second initialization uses the same client network
+not ok 2 - corrected README second initialization uses the same client network
+  ---
+  duration_ms: 54.677959
+  type: 'test'
+  location: '<repo>/test/documentation.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: 'publicClient chain id 560048 does not match provided chain id 17000'
+  code: 'INVALID_ARGUMENT'
+  stack: |-
+    LidoSDKCore.error (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:333:24)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/logger.js:9:43)
+    LidoSDKCore.init (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:168:32)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/logger.js:9:43)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/Initialize.js:5:43)
+    new LidoSDKCore (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:131:68)
+    new LidoSDK (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/sdk.js:102:21)
+    file://<repo>/.generated/snippet-ZmWPBG/snippet.mjs:6:17
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:647:26)
+  ...
+# Subtest: corrected initialization and balance read use actual SDK and viem with fixture RPC
+not ok 3 - corrected initialization and balance read use actual SDK and viem with fixture RPC
+  ---
+  duration_ms: 116.489917
+  type: 'test'
+  location: '<repo>/test/documentation.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'publicClient chain id 560048 does not match provided chain id 17000'
+  code: 'INVALID_ARGUMENT'
+  stack: |-
+    LidoSDKCore.error (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:333:24)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/logger.js:9:43)
+    LidoSDKCore.init (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:168:32)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/logger.js:9:43)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/Initialize.js:5:43)
+    new LidoSDKCore (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:131:68)
+    new LidoSDK (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/sdk.js:102:21)
+    file://<repo>/.generated/snippet-72L12W/snippet.mjs:20:13
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:647:26)
+  ...
+# Subtest: corrected README initialization constructs a Hoodi SDK
+not ok 4 - corrected README initialization constructs a Hoodi SDK
+  ---
+  duration_ms: 46.359042
+  type: 'test'
+  location: '<repo>/test/documentation.test.mjs:48:1'
+  failureType: 'testCodeFailure'
+  error: 'publicClient chain id 560048 does not match provided chain id 17000'
+  code: 'INVALID_ARGUMENT'
+  stack: |-
+    LidoSDKCore.error (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:333:24)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/logger.js:9:43)
+    LidoSDKCore.init (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:168:32)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/logger.js:9:43)
+    LidoSDKCore.replacementMethod (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/common/decorators/Initialize.js:5:43)
+    new LidoSDKCore (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/core/core.js:131:68)
+    new LidoSDK (file://<repo>/node_modules/@lidofinance/lido-ethereum-sdk/dist/esm/sdk.js:102:21)
+    file://<repo>/.generated/snippet-CueJhu/snippet.mjs:12:13
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:647:26)
+  ...
+# Subtest: SDK already rejects two supported but different client/SDK networks
+ok 5 - SDK already rejects two supported but different client/SDK networks
+  ---
+  duration_ms: 2.204292
+  type: 'test'
+  ...
+# Subtest: documented Core import reproduces missing hoodi export from viem
+ok 6 - documented Core import reproduces missing hoodi export from viem
+  ---
+  duration_ms: 68.278125
+  type: 'test'
+  ...
+# Subtest: documented wrapping getter is absent from the withdrawal module
+ok 7 - documented wrapping getter is absent from the withdrawal module
+  ---
+  duration_ms: 5.325125
+  type: 'test'
+  ...
+# Subtest: snippet selection fails loudly if the documentation structure changes
+ok 8 - snippet selection fails loudly if the documentation structure changes
+  ---
+  duration_ms: 2.2715
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 5
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4585.068333

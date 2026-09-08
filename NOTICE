@@ -1,0 +1,17 @@
+Lido SDK example checks
+Original verification code and project documentation:
+Copyright (c) 2026 Gautam Manchandani
+
+The following material is copied or derived from lidofinance/lido-ethereum-sdk
+at commit 14d3236ff91fdb5c783c11abf0f50f063cb942cb:
+- evidence/upstream/README.md
+- evidence/upstream/usage.md
+- evidence/upstream/basic-examples.md
+- examples/README.md
+- src/initialize.ts
+- patches/0001-readme-hoodi-chain-id.patch
+
+Copyright (c) 2024 Lido. MIT License.
+The full upstream license is preserved in licenses/Lido-MIT.txt.
+Source: https://github.com/lidofinance/lido-ethereum-sdk
+No affiliation with or endorsement by Lido is asserted.

@@ -1,0 +1,28 @@
+{
+  "auditedAt": "2026-09-08",
+  "repository": "https://github.com/lidofinance/lido-ethereum-sdk",
+  "commit": "14d3236ff91fdb5c783c11abf0f50f063cb942cb",
+  "branch": "develop",
+  "runtime": {
+    "node": "22.18.0",
+    "sdk": "4.8.0",
+    "viem": "2.56.3"
+  },
+  "files": [
+    {
+      "source": "README.md",
+      "snapshot": "evidence/upstream/README.md",
+      "sha256": "4884d0eea615ce3a8f9a3938a0d969ffc8c2ac4256711d5f5bcbf36789e2db35"
+    },
+    {
+      "source": "docs/sdk/get-started/usage.md",
+      "snapshot": "evidence/upstream/usage.md",
+      "sha256": "766af16e52de8d0fc8872deb7bfd9422f5850df64b32327744243c2616fbc505"
+    },
+    {
+      "source": "docs/sdk/get-started/basic-examples.md",
+      "snapshot": "evidence/upstream/basic-examples.md",
+      "sha256": "637af15714ab7fa0cde862c43fec4b099ac9b446bebd4425b503e7c4b7f640fa"
+    }
+  ]
+}

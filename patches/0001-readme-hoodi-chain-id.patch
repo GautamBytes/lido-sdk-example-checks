@@ -1,0 +1,20 @@
+--- a/README.md
++++ b/README.md
+@@ -67,7 +67,7 @@
+ });
+ 
+ const sdk = new LidoSDK({
+-  chainId: 17000,
++  chainId: hoodi.id,
+   publicClient,
+   walletClient: provider, // optional, only for sending/preparing transactions
+ });
+@@ -79,7 +79,7 @@
+ 
+ ```ts
+ const lidoSDK = new LidoSDK({
+-  chainId: 17000,
++  chainId: hoodi.id,
+   publicClient,
+   walletClient, //  only for sending/preparing transactions
+ });

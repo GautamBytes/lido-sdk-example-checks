@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-09-08",
+  "scope": "Open pull request listing, not an exhaustive branch or closed-work search",
+  "pulls": [
+    {
+      "number": 385,
+      "title": "v4.9.0",
+      "url": "https://github.com/lidofinance/lido-ethereum-sdk/pull/385"
+    }
+  ]
+}

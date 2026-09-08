@@ -1,0 +1,26 @@
+{
+  "name": "lido-sdk-example-checks",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reproducible Lido SDK documentation failures and a tested initialization fix.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Gautam Manchandani (GautamBytes)",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check:types": "tsc --noEmit",
+    "check": "npm run check:types && npm test",
+    "reproduce": "node scripts/reproduce.mjs",
+    "demo": "node --import tsx src/initialize.ts"
+  },
+  "dependencies": {
+    "@lidofinance/lido-ethereum-sdk": "4.8.0",
+    "viem": "2.56.3"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "tsx": "4.20.6",
+    "@types/node": "22.18.6"
+  }
+}
